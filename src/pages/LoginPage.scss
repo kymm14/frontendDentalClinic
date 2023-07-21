@@ -1,0 +1,10 @@
+.backgroundLogin {
+    background-image: url(public/images/odontologia.jpg);
+    background-size: cover;
+    height: 100vh;
+    width: 100%;
+    background-repeat: no-repeat;
+    position: absolute !important;
+    z-index: -1;
+    opacity: 0.5;
+}
