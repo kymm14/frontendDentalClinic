@@ -51,15 +51,8 @@ userService.getProfile = async (token) => {
 userService.modifyProfile = async (token, user) => {
   const options = {
     method: "PUT",
-    url: `${global.BASE_API_URL}/api/user/update`,
+    url: `${global.BASE_API_URL}/api/users/update`,
     data: user,
-    body: {
-      name: user.name,
-      last_name: user.last_name,
-      email: user.email,
-      birthday: user.birthday,
-      password: user.password,
-    },
     headers: {
       accept: "application/json",
       Authorization: `Bearer ${token}`,
@@ -82,6 +75,22 @@ userService.getAppointments = async (token, appointment) => {
   const options = {
     method: "GET",
     url: `${global.BASE_API_URL}/api/users/appointments`,
+    data: appointment,
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  // await sleep(2000); // TODO
+  const response = await axios.request(options);
+  return response.data;
+};
+
+userService.getAppointmentsDoctor = async (token, appointment) => {
+  const options = {
+    method: "GET",
+    url: `${global.BASE_API_URL}/api/doctor/appointments`,
     data: appointment,
     headers: {
       accept: "application/json",

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+
+// @MUI
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,11 +16,11 @@ import { AlertTitle, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Alert from "@mui/material/Alert";
 
-import authService from "../_services/authService";
-import { updateAuthStateLogin } from "../features/authentication/updateAuthState";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import authService from "../../_services/authService";
+import { updateAuthStateLogin } from "../../features/authentication/updateAuthState";
 import "./LoginPage.scss";
 
 const defaultTheme = createTheme();

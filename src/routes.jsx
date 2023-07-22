@@ -4,14 +4,14 @@ import { Navigate } from "react-router-dom";
 
 // pages
 import AdminPage from "./pages/AdminPage";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
+import HomePage from "./pages/home/HomePage";
+import LoginPage from "./pages/login/LoginPage";
+import RegisterPage from "./pages/register/RegisterPage";
 import ServicesPage from "./pages/ServicesPage";
 import ProfilePage from "./pages/ProfilePage";
 import Page404 from "./pages/Page404";
 import AboutPage from "./pages/AboutPage";
-import AccountPage from "./pages/AccountPage";
+import ProfileDoctor from "./pages/ProfileDoctor";
 
 export default function Router() {
   return (
@@ -22,7 +22,7 @@ export default function Router() {
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/services' element={<ServicesPage />} />
         <Route path='/profile' element={<ProfilePage />} />
-        <Route path='/account' element={<AccountPage />} />
+        <Route path='/doctor' element={<ProfileDoctor />} />
         <Route path='/admin' element={<AdminPage />} />
         <Route path='/about' element={<AboutPage />} />
         <Route path='/404' element={<Page404 />} />

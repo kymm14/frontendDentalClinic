@@ -40,6 +40,7 @@ import { ViewWeek, Visibility, VisibilityOff } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 
 const defaultTheme = createTheme();
 
@@ -62,6 +63,7 @@ export default function ProfilePage() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const navigate = useNavigate();
   const userRole = useSelector((state) => state.auth.userInfo.role);
+
   const isDoctor = userRole == "doctor";
 
   useEffect(() => {
@@ -69,10 +71,11 @@ export default function ProfilePage() {
       if (isDoctor) {
         navigate("/doctor");
       } else {
-        navigate("/profile");
+        navigate("/");
       }
     }
   }, [isLoggedIn]);
+
   // glogal state hooks
   const token = useSelector((state) => state.auth.token);
 
@@ -134,6 +137,7 @@ export default function ProfilePage() {
         firstName: data.name,
         lastName: data.last_name,
         email: data.email,
+        role: data.id_role,
       });
       console.log(data);
     } catch (error) {
@@ -169,7 +173,7 @@ export default function ProfilePage() {
 
   const getAppointments = async () => {
     try {
-      const response = await userService.getAppointments(token);
+      const response = await userService.getAppointmentsDoctor(token);
       setDates(response);
       console.log(response);
     } catch (error) {
@@ -178,12 +182,12 @@ export default function ProfilePage() {
   };
 
   const ViewAppointments = ({ appointments }) => {
-    function createData(date, time, doctorName, doctorLastName) {
-      return { date, time, doctorName, doctorLastName };
+    function createData(date, time, patientName, patientLastName) {
+      return { date, time, patientName, patientLastName };
     }
 
     const dates = appointments.map((a) =>
-      createData(a.date, a.time, a.doctor.name, a.doctor.lastName)
+      createData(a.date, a.time, a.patient.name, a.patient.lastName)
     );
 
     return (
@@ -199,7 +203,7 @@ export default function ProfilePage() {
               <TableRow>
                 <TableCell align='center'>Date</TableCell>
                 <TableCell align='center'>Time</TableCell>
-                <TableCell align='center'>Doctor</TableCell>
+                <TableCell align='center'>Patient</TableCell>
                 <TableCell align='center'>Options</TableCell>
               </TableRow>
             </TableHead>
@@ -217,7 +221,7 @@ export default function ProfilePage() {
                     {row.time}
                   </TableCell>
                   <TableCell align='center' component='th' scope='row'>
-                    {row.doctorName} {row.doctorLastName}
+                    {row.patientName} {row.patientLastName}
                   </TableCell>
                   <TableCell align='center'>
                     <IconButton>
@@ -292,6 +296,12 @@ export default function ProfilePage() {
                           primaryTypographyProps={{ fontSize: 15 }}
                           primary={user.birthday}
                         />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon>
+                          <MedicalServicesIcon color='primary' />
+                        </ListItemIcon>
+                        <ListItemText primary={"Doctor"} />
                       </ListItem>
                     </List>
                     <Button

@@ -14,14 +14,10 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import SchoolTwoToneIcon from "@mui/icons-material/SchoolTwoTone";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Divider } from "@mui/material";
 import BuildTwoToneIcon from "@mui/icons-material/BuildTwoTone";
 import LoginTwoToneIcon from "@mui/icons-material/LoginTwoTone";
-import AppRegistrationTwoToneIcon from "@mui/icons-material/AppRegistrationTwoTone";
-import LogoutTwoToneIcon from "@mui/icons-material/LogoutTwoTone";
-import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 
 //
 import "./ResponsiveAppBar.scss";
@@ -42,7 +38,6 @@ const pages = [
 
 const settings = [
   { title: "Profile", path: "/profile", handle: null },
-  { title: "Acount", path: "/account", handle: null },
   { title: "Logout", path: "/", handle: handleLogout },
 ];
 
@@ -78,7 +73,6 @@ function ResponsiveAppBar() {
       color={isAdmin ? "success" : "primary"}>
       <Container>
         <Toolbar disableGutters>
-
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size='large'
@@ -169,7 +163,6 @@ function ResponsiveAppBar() {
                 <Button
                   variant='contained'
                   size='small'
-                  //startIcon={<AppRegistrationTwoToneIcon />}
                   sx={{
                     my: 2,
                     color: "white",
@@ -203,10 +196,6 @@ function ResponsiveAppBar() {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title='Open settings'>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {/* <Avatar
-                           alt="Remy Sharp"
-                           src="/static/images/avatar/2.jpg"
-                        /> */}
                   <AccountCircleIcon
                     sx={{
                       display: { xs: "flex" },
