@@ -103,6 +103,21 @@ userService.getAppointmentsDoctor = async (token, appointment) => {
   return response.data;
 };
 
+userService.createAppointment = async (token, user) => {
+  const options = {
+    method: "PUT",
+    url: `${global.BASE_API_URL}/api/users/create/appointment`,
+    data: user,
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.request(options);
+  return response.data;
+};
+
 userService.saveProfile = async (token, user) => {
   const options = {
     method: "PUT",

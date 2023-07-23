@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { format } from "date-fns";
 import userService from "../_services/userService";
 
 // @MUI
@@ -33,10 +32,9 @@ import {
 import EmailIcon from "@mui/icons-material/Email";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-import { ViewWeek, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
@@ -73,7 +71,8 @@ export default function ProfilePage() {
       }
     }
   }, [isLoggedIn]);
-  // glogal state hooks
+
+  // global state hooks
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
@@ -113,14 +112,6 @@ export default function ProfilePage() {
       birthday: data.get("birthday"),
       password: data.get("password"),
     });
-
-    // const dataProfile = {
-    //   name: data.get("firstName"),
-    //   last_name: data.get("lastName"),
-    //   email: data.get("email"),
-    //   birthday: data.get("birthday"),
-    //   password: data.get("password"),
-    // };
 
     modifyProfile(data);
   };
