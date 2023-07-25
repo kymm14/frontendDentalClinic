@@ -15,7 +15,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Divider } from "@mui/material";
+import { Divider, ThemeProvider, createTheme } from "@mui/material";
 import BuildTwoToneIcon from "@mui/icons-material/BuildTwoTone";
 import LoginTwoToneIcon from "@mui/icons-material/LoginTwoTone";
 
@@ -70,7 +70,7 @@ function ResponsiveAppBar() {
     <AppBar
       position='static'
       className='ResponsiveAppBar'
-      color={isAdmin ? "success" : "primary"}>
+      color={isAdmin ? "secondary" : "primary"}>
       <Container>
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -124,10 +124,11 @@ function ResponsiveAppBar() {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: "white",
               textDecoration: "none",
             }}></Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box
+            sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, gap: 1 }}>
             {pages.map((page) => (
               <NavLink
                 style={{ textDecoration: "none" }}
@@ -135,7 +136,11 @@ function ResponsiveAppBar() {
                 key={page.title}>
                 <Button
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}>
+                  sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                  }}>
                   {page.title}
                 </Button>
               </NavLink>
@@ -199,7 +204,6 @@ function ResponsiveAppBar() {
                   <AccountCircleIcon
                     sx={{
                       display: { xs: "flex" },
-                      mr: 1,
                       color: "white",
                     }}
                   />

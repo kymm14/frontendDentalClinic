@@ -41,13 +41,11 @@ export default function ServicesPage() {
           </Typography>
         </Box>
         <Box
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "3em",
-          }}
           sx={{
             mt: 4,
+            display: "grid",
+            gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(3, 1fr)" },
+            gap: "3em",
           }}>
           <Card
             sx={{

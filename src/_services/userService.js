@@ -34,6 +34,21 @@ userService.getPatients = async (token, page = 1) => {
   return response.data;
 };
 
+userService.getDoctors = async (token, page = 1) => {
+  const options = {
+    method: "GET",
+    url: `${global.BASE_API_URL}/api/users/doctors`,
+    params: { page: page },
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  //await sleep(2000); // TODO
+  const response = await axios.request(options);
+  return response.data;
+};
+
 userService.getProfile = async (token) => {
   const options = {
     method: "GET",
@@ -48,24 +63,16 @@ userService.getProfile = async (token) => {
   return response.data;
 };
 
-userService.modifyProfile = async (token, user) => {
+userService.modifyProfile = async (token, body) => {
   const options = {
     method: "PUT",
     url: `${global.BASE_API_URL}/api/users/update`,
-    data: user,
+    data: body,
     headers: {
       accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
   };
-
-  // const body = {
-  //   name: user.name,
-  //   last_name: user.last_name,
-  //   email: user.email,
-  //   birthday: user.birthday,
-  //   password: user.password,
-  // };
 
   const response = await axios.request(options);
   return response.data;
@@ -103,11 +110,11 @@ userService.getAppointmentsDoctor = async (token, appointment) => {
   return response.data;
 };
 
-userService.createAppointment = async (token, user) => {
+userService.createAppointment = async (token, body) => {
   const options = {
-    method: "PUT",
+    method: "POST",
     url: `${global.BASE_API_URL}/api/users/create/appointment`,
-    data: user,
+    data: body,
     headers: {
       accept: "application/json",
       Authorization: `Bearer ${token}`,
@@ -121,7 +128,7 @@ userService.createAppointment = async (token, user) => {
 userService.saveProfile = async (token, user) => {
   const options = {
     method: "PUT",
-    url: `${global.BASE_API_URL}/api/user/profile`,
+    url: `${global.BASE_API_URL}/api/users/profile`,
     data: user,
     headers: {
       accept: "application/json",

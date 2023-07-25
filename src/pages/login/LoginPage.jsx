@@ -95,7 +95,7 @@ export default function LoginPage() {
               flexDirection: "column",
               alignItems: "center",
             }}>
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component='h1' variant='h5'>
@@ -149,7 +149,7 @@ export default function LoginPage() {
               </Button>
               <Grid container justifyContent='center'>
                 <Grid item>
-                  <Link href='/register' variant='body2'>
+                  <Link href='/register' variant='body2' color={"#212121"}>
                     {"Don't have an account? Register"}
                   </Link>
                 </Grid>
