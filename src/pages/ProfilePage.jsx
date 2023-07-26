@@ -93,6 +93,10 @@ export default function ProfilePage() {
     navigate("/create");
   };
 
+  const handleUpdateAppointment = () => {
+    navigate("/appointment");
+  };
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
@@ -171,12 +175,12 @@ export default function ProfilePage() {
   };
 
   const ViewAppointments = ({ appointments }) => {
-    function createData(date, time, doctorName, doctorLastName) {
-      return { date, time, doctorName, doctorLastName };
+    function createData(id, date, time, doctorName, doctorLastName) {
+      return { id, date, time, doctorName, doctorLastName };
     }
 
     const dates = appointments.map((a) =>
-      createData(a.date, a.time, a.doctor.name, a.doctor.lastName)
+      createData(a.id, a.date, a.time, a.doctor.name, a.doctor.lastName)
     );
 
     return (
@@ -213,7 +217,7 @@ export default function ProfilePage() {
                     {row.doctorName} {row.doctorLastName}
                   </TableCell>
                   <TableCell align='center'>
-                    <IconButton>
+                    <IconButton onClick={handleUpdateAppointment}>
                       <EditIcon />
                     </IconButton>
                     <IconButton>

@@ -61,7 +61,7 @@ export default function CreateAppointment() {
   const navigate = useNavigate();
   const userRole = useSelector((state) => state.auth.userInfo.role);
   const [doctors, setDoctors] = useState({});
-  const [appointments, setAppointments] = useState(false);
+  const [appointments, editAppointments] = useState(false);
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -137,10 +137,10 @@ export default function CreateAppointment() {
   const token = useSelector((state) => state.auth.token);
 
   const handleClickSaveAppointment = () => {
-    setAppointments(true);
+    editAppointments(true);
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     getDoctors();
   }, []);
 
@@ -152,14 +152,15 @@ export default function CreateAppointment() {
       date: data.get("date"),
       time: data.get("time"),
     };
-
-    createAppointment(body);
+    console.log(body);
+    updateAppointment(body);
   };
 
-  const createAppointment = async (body) => {
+  const updateAppointment = async (body) => {
     try {
-      const response = await userService.createAppointment(token, body);
-      setAppointments(response);
+      const response = await userService.modifyAppointment(token, body);
+      setUser(response);
+      console.log(response);
     } catch (error) {
       console.log(error);
     }

@@ -4,6 +4,8 @@ import { global } from "../_config/global";
 
 const userService = {};
 
+// USERS SERVICES
+
 userService.getAll = async (token, page = 1) => {
   const options = {
     method: "GET",
@@ -15,6 +17,22 @@ userService.getAll = async (token, page = 1) => {
     },
   };
   //await sleep(2000); // TODO
+  const response = await axios.request(options);
+  return response.data;
+};
+
+userService.saveProfile = async (token, user) => {
+  const options = {
+    method: "PUT",
+    url: `${global.BASE_API_URL}/api/users/profile`,
+    data: user,
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  // await sleep(2000); // TODO
   const response = await axios.request(options);
   return response.data;
 };
@@ -78,6 +96,8 @@ userService.modifyProfile = async (token, body) => {
   return response.data;
 };
 
+// APPOINTMENTS SERVICES
+
 userService.getAppointments = async (token, appointment) => {
   const options = {
     method: "GET",
@@ -125,18 +145,17 @@ userService.createAppointment = async (token, body) => {
   return response.data;
 };
 
-userService.saveProfile = async (token, user) => {
+userService.modifyAppointment = async (token, body, id) => {
   const options = {
     method: "PUT",
-    url: `${global.BASE_API_URL}/api/users/profile`,
-    data: user,
+    url: `${global.BASE_API_URL}/api/users/update/appointment/${id}`,
+    data: body,
     headers: {
       accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
   };
 
-  // await sleep(2000); // TODO
   const response = await axios.request(options);
   return response.data;
 };

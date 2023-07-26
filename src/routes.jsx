@@ -14,6 +14,8 @@ import AboutPage from "./pages/AboutPage";
 import ProfileDoctor from "./pages/ProfileDoctor";
 import UpdateProfile from "./pages/UpdateProfile";
 import CreateAppointment from "./pages/CreateAppointment";
+import ModifyAppointment from "./pages/UpdateAppointment";
+import UpdateAppointment from "./pages/UpdateAppointment";
 
 export default function Router() {
   return (
@@ -28,6 +30,7 @@ export default function Router() {
         <Route path='/admin' element={<AdminPage />} />
         <Route path='/about' element={<AboutPage />} />
         <Route path='/create' element={<CreateAppointment />} />
+        <Route path='/appointment' element={<UpdateAppointment />} />
         <Route path='/update' element={<UpdateProfile />} />
         <Route path='/404' element={<Page404 />} />
         <Route path='*' element={<Navigate to='/404' />} />
