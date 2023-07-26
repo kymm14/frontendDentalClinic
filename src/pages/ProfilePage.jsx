@@ -93,8 +93,8 @@ export default function ProfilePage() {
     navigate("/create");
   };
 
-  const handleUpdateAppointment = () => {
-    navigate("/appointment");
+  const handleUpdateAppointment = (id) => {
+    navigate(`/appointment/${id}`);
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -217,7 +217,7 @@ export default function ProfilePage() {
                     {row.doctorName} {row.doctorLastName}
                   </TableCell>
                   <TableCell align='center'>
-                    <IconButton onClick={handleUpdateAppointment}>
+                    <IconButton onClick={() => handleUpdateAppointment(row.id)}>
                       <EditIcon />
                     </IconButton>
                     <IconButton>

@@ -150,6 +150,7 @@ userService.modifyAppointment = async (token, body, id) => {
     method: "PUT",
     url: `${global.BASE_API_URL}/api/users/update/appointment/${id}`,
     data: body,
+    params: { id },
     headers: {
       accept: "application/json",
       Authorization: `Bearer ${token}`,

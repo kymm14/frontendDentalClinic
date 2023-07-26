@@ -37,7 +37,7 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -136,6 +136,8 @@ export default function CreateAppointment() {
 
   const token = useSelector((state) => state.auth.token);
 
+  const { id } = useParams();
+
   const handleClickSaveAppointment = () => {
     editAppointments(true);
   };
@@ -153,12 +155,13 @@ export default function CreateAppointment() {
       time: data.get("time"),
     };
     console.log(body);
-    updateAppointment(body);
+    updateAppointment(body, id);
   };
 
-  const updateAppointment = async (body) => {
+  const updateAppointment = async (body, id) => {
     try {
-      const response = await userService.modifyAppointment(token, body);
+      const response = await userService.modifyAppointment(token, body, id);
+      editAppointments(response);
       setUser(response);
       console.log(response);
     } catch (error) {

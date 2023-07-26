@@ -30,7 +30,7 @@ export default function Router() {
         <Route path='/admin' element={<AdminPage />} />
         <Route path='/about' element={<AboutPage />} />
         <Route path='/create' element={<CreateAppointment />} />
-        <Route path='/appointment' element={<UpdateAppointment />} />
+        <Route path='/appointment/:id' element={<UpdateAppointment />} />
         <Route path='/update' element={<UpdateProfile />} />
         <Route path='/404' element={<Page404 />} />
         <Route path='*' element={<Navigate to='/404' />} />
