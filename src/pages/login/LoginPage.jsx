@@ -26,7 +26,7 @@ import "./LoginPage.scss";
 const defaultTheme = createTheme();
 
 export default function LoginPage() {
-  // hooks
+  // HOOKS
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -59,7 +59,7 @@ export default function LoginPage() {
       password: data.get("password"),
     };
 
-    // validar en el frontend
+    // VALIDATION FRONTEND
     login(credentials);
   };
 

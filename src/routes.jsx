@@ -14,7 +14,6 @@ import AboutPage from "./pages/AboutPage";
 import ProfileDoctor from "./pages/ProfileDoctor";
 import UpdateProfile from "./pages/UpdateProfile";
 import CreateAppointment from "./pages/CreateAppointment";
-import ModifyAppointment from "./pages/UpdateAppointment";
 import UpdateAppointment from "./pages/UpdateAppointment";
 
 export default function Router() {

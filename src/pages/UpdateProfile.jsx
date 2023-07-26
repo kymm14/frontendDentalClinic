@@ -1,45 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import userService from "../_services/userService";
+import { useNavigate } from "react-router-dom";
 
 // @MUI
 import {
   Avatar,
   Box,
   Button,
-  Container,
-  CssBaseline,
   Grid,
   IconButton,
   InputAdornment,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Paper,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
-  ThemeProvider,
   Typography,
   createTheme,
 } from "@mui/material";
-import EmailIcon from "@mui/icons-material/Email";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate } from "react-router-dom";
-
-const defaultTheme = createTheme();
 
 const initialFormValues = {
   firstName: "",
@@ -53,21 +32,16 @@ export default function UpdateProfile() {
   const [showPassword, setShowPassword] = useState(false);
   const [editProfile, setEditProfile] = useState(true);
   const [user, setUser] = useState({});
-  const [dates, setDates] = useState([]);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [isLoading, setIsLoading] = useState(true);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const navigate = useNavigate();
-  const userRole = useSelector((state) => state.auth.userInfo.role);
-  const isDoctor = userRole == "doctor";
-  const isAdmin = userRole == "admin";
-
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     getProfile();
   }, []);
 
+  // HANDLERS
   const handleClickEditProfile = () => {
     setEditProfile(true);
   };

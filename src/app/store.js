@@ -1,10 +1,10 @@
-// @redux
+// @REDUX
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import sessionStorage from "redux-persist/lib/storage/session";
 import storage from "redux-persist/lib/storage";
 
-// reducers
+// REDUCERS
 import authReducer from "../features/authentication/authSlice";
 
 // ----------------------------------------------------------------------

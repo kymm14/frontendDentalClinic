@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { format } from "date-fns";
 
 // @MUI
 import {
   Box,
   Container,
   IconButton,
-  MenuItem,
   Pagination,
-  TableFooter,
   Typography,
 } from "@mui/material";
 import userService from "../_services/userService";
@@ -19,14 +18,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { format } from "date-fns";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 // ----------------------------------------------------------------------
 
 export default function AdminPage() {
-  // hooks
+  // HOOKS
   const [users, setUsers] = useState([]);
   const [usersPage, setUsersPage] = useState(1);
   const [count, setCount] = useState(0);
@@ -36,6 +34,8 @@ export default function AdminPage() {
   useEffect(() => {
     getUsers();
   }, [usersPage]);
+
+  // HANDLE
 
   const handleChange = (event, value) => {
     setUsersPage(value);

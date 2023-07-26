@@ -1,43 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import userService from "../_services/userService";
+import { useNavigate } from "react-router-dom";
 
 // @MUI
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  CssBaseline,
-  Grid,
-  IconButton,
-  InputAdornment,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  ThemeProvider,
-  Typography,
-  createTheme,
-} from "@mui/material";
-import EmailIcon from "@mui/icons-material/Email";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import { Box, Button } from "@mui/material";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -45,35 +13,32 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
+// @MUI/X
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateField } from "@mui/x-date-pickers/DateField";
 
 export default function CreateAppointment() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [editProfile, setEditProfile] = useState(false);
-  const [user, setUser] = useState({});
-  const [dates, setDates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const navigate = useNavigate();
-  const userRole = useSelector((state) => state.auth.userInfo.role);
   const [doctors, setDoctors] = useState({});
   const [appointments, setAppointments] = useState(false);
+  const [personName, setPersonName] = React.useState([]);
+  const [timeValue, setTime] = React.useState([]);
+  const [date, setDate] = React.useState([]);
+  const theme = useTheme();
+  const token = useSelector((state) => state.auth.token);
 
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
+  useEffect(() => {
+    getDoctors();
+  }, []);
+
+  const handleClickSaveAppointment = () => {
+    setAppointments(true);
   };
 
+  // DOCTORS
   const names = [
     {
       id_doctor: 2,
@@ -89,7 +54,40 @@ export default function CreateAppointment() {
     },
   ];
 
-  const times = ["08:00", "10:00", "13:00", "15:00", "17:00", "19:00"];
+  // TIME APPOINTMENTS
+  const times = [
+    "08:00",
+    "08:30",
+    "09:00",
+    "09:30",
+    "10:00",
+    "10:30",
+    "11:00",
+    "11:30",
+    "12:00",
+    "12:30",
+    "13:00",
+    "13:30",
+    "14:00",
+    "14:30",
+    "15:00",
+    "15:30",
+    "16:00",
+    "16:30",
+    "17:00",
+  ];
+
+  // TABLE SELECTION
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
 
   function getStyles(name, personName, theme) {
     return {
@@ -109,40 +107,19 @@ export default function CreateAppointment() {
     };
   }
 
-  const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
-  const [timeValue, setTime] = React.useState([]);
-  const [date, setDate] = React.useState([]);
-
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+    setPersonName(typeof value === "string" ? value.split(",") : value);
   };
 
   const handleChangeTime = (event) => {
     const {
       target: { value },
     } = event;
-    setTime(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+    setTime(typeof value === "string" ? value.split(",") : value);
   };
-
-  const token = useSelector((state) => state.auth.token);
-
-  const handleClickSaveAppointment = () => {
-    setAppointments(true);
-  };
-
-  useEffect(() => { 
-    getDoctors();
-  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -156,20 +133,20 @@ export default function CreateAppointment() {
     createAppointment(body);
   };
 
-  const createAppointment = async (body) => {
-    try {
-      const response = await userService.createAppointment(token, body);
-      setAppointments(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const getDoctors = async () => {
     try {
       const data = await userService.getDoctors(token);
       setDoctors(data);
       console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const createAppointment = async (body) => {
+    try {
+      const response = await userService.createAppointment(token, body);
+      setAppointments(response);
     } catch (error) {
       console.log(error);
     }

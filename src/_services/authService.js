@@ -11,7 +11,6 @@ authService.login = async (credentials) => {
     data: credentials,
   };
 
-  // await sleep(2000); // TODO
   const response = await axios.request(options);
   return response.data;
 };
@@ -23,12 +22,8 @@ authService.register = async (user) => {
     data: user,
   };
 
-  // await sleep(2000); // TODO
   const response = await axios.request(options);
   return response.data;
 };
-
-const sleep = (ms) => new Promise((r) => setTimeout(r, 0));
-// const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export default authService;

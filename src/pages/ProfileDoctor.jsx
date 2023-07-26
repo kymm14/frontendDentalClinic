@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import userService from "../_services/userService";
+import { useNavigate } from "react-router-dom";
 
 // @MUI
 import {
@@ -33,13 +34,11 @@ import {
 import EmailIcon from "@mui/icons-material/Email";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-import { ViewWeek, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate } from "react-router-dom";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 
 const defaultTheme = createTheme();
@@ -53,7 +52,7 @@ const initialFormValues = {
 };
 
 export default function ProfilePage() {
-  // hooks
+  // HOOKS
   const [showPassword, setShowPassword] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const [user, setUser] = useState({});
@@ -63,8 +62,8 @@ export default function ProfilePage() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const navigate = useNavigate();
   const userRole = useSelector((state) => state.auth.userInfo.role);
-
   const isDoctor = userRole == "doctor";
+  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -76,9 +75,6 @@ export default function ProfilePage() {
     }
   }, [isLoggedIn]);
 
-  // glogal state hooks
-  const token = useSelector((state) => state.auth.token);
-
   useEffect(() => {
     getProfile();
   }, []);
@@ -87,7 +83,7 @@ export default function ProfilePage() {
     getAppointments();
   }, []);
 
-  // handlers
+  // HANDLERS
   const handleClickEditProfile = () => {
     setEditProfile(true);
   };
@@ -117,14 +113,6 @@ export default function ProfilePage() {
       password: data.get("password"),
     });
 
-    // const dataProfile = {
-    //   name: data.get("firstName"),
-    //   last_name: data.get("lastName"),
-    //   email: data.get("email"),
-    //   birthday: data.get("birthday"),
-    //   password: data.get("password"),
-    // };
-
     modifyProfile(data);
   };
 
@@ -139,20 +127,6 @@ export default function ProfilePage() {
         email: data.email,
         role: data.id_role,
       });
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const saveProfile = async () => {
-    setIsLoading(true);
-    try {
-      const data = await userService.getProfile(token);
-      setUser(data);
-      console.log(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -165,7 +139,6 @@ export default function ProfilePage() {
       const response = await userService.modifyProfile(token);
       setEditProfile(false);
       getProfile(token);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -175,7 +148,6 @@ export default function ProfilePage() {
     try {
       const response = await userService.getAppointmentsDoctor(token);
       setDates(response);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import userService from "../_services/userService";
+import { useNavigate } from "react-router-dom";
 
 // @MUI
 import {
@@ -11,20 +12,17 @@ import {
   CssBaseline,
   Grid,
   IconButton,
-  InputAdornment,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Paper,
-  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   ThemeProvider,
   Typography,
   createTheme,
@@ -32,12 +30,8 @@ import {
 import EmailIcon from "@mui/icons-material/Email";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
@@ -50,7 +44,7 @@ const initialFormValues = {
 };
 
 export default function ProfilePage() {
-  // hooks
+  // HOOKS
   const [showPassword, setShowPassword] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const [user, setUser] = useState({});
@@ -62,6 +56,7 @@ export default function ProfilePage() {
   const userRole = useSelector((state) => state.auth.userInfo.role);
   const isDoctor = userRole == "doctor";
   const isAdmin = userRole == "admin";
+  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -73,9 +68,6 @@ export default function ProfilePage() {
     }
   }, [isLoggedIn]);
 
-  // global state hooks
-  const token = useSelector((state) => state.auth.token);
-
   useEffect(() => {
     getProfile();
   }, []);
@@ -84,7 +76,7 @@ export default function ProfilePage() {
     getAppointments();
   }, []);
 
-  // handlers
+  // HANDLERS
   const handleClickEditProfile = () => {
     navigate("/update");
   };
@@ -95,20 +87,6 @@ export default function ProfilePage() {
 
   const handleUpdateAppointment = (id) => {
     navigate(`/appointment/${id}`);
-  };
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: value, // key: value
-    });
   };
 
   const handleSubmit = (event) => {
@@ -134,6 +112,18 @@ export default function ProfilePage() {
     }
   };
 
+  const handleDeleteAppointment = async (body) => {
+    try {
+      const id = { id: body };
+      const data = await userService.deleteAppointment(token, id);
+      const response = await userService.getAppointments(token);
+      setDates(response);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getProfile = async () => {
     setIsLoading(true);
     try {
@@ -145,18 +135,6 @@ export default function ProfilePage() {
         email: data.email,
       });
       console.log(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const saveProfile = async () => {
-    setIsLoading(true);
-    try {
-      const data = await userService.getProfile(token);
-      setUser(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -220,7 +198,7 @@ export default function ProfilePage() {
                     <IconButton onClick={() => handleUpdateAppointment(row.id)}>
                       <EditIcon />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={() => handleDeleteAppointment(row.id)}>
                       <DeleteIcon sx={{ color: "error.main" }} />
                     </IconButton>
                   </TableCell>
@@ -290,7 +268,7 @@ export default function ProfilePage() {
                       </ListItemIcon>
                       <ListItemText
                         primaryTypographyProps={{ fontSize: 15 }}
-                        primary={user.birthday}
+                        primary={user?.birthday}
                       />
                     </ListItem>
                   </List>

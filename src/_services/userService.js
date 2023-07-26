@@ -16,7 +16,7 @@ userService.getAll = async (token, page = 1) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  //await sleep(2000); // TODO
+
   const response = await axios.request(options);
   return response.data;
 };
@@ -32,7 +32,6 @@ userService.saveProfile = async (token, user) => {
     },
   };
 
-  // await sleep(2000); // TODO
   const response = await axios.request(options);
   return response.data;
 };
@@ -47,7 +46,7 @@ userService.getPatients = async (token, page = 1) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  //await sleep(2000); // TODO
+
   const response = await axios.request(options);
   return response.data;
 };
@@ -62,7 +61,7 @@ userService.getDoctors = async (token, page = 1) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  //await sleep(2000); // TODO
+
   const response = await axios.request(options);
   return response.data;
 };
@@ -76,7 +75,7 @@ userService.getProfile = async (token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  //await sleep(2000); // TODO
+
   const response = await axios.request(options);
   return response.data;
 };
@@ -109,7 +108,6 @@ userService.getAppointments = async (token, appointment) => {
     },
   };
 
-  // await sleep(2000); // TODO
   const response = await axios.request(options);
   return response.data;
 };
@@ -125,7 +123,6 @@ userService.getAppointmentsDoctor = async (token, appointment) => {
     },
   };
 
-  // await sleep(2000); // TODO
   const response = await axios.request(options);
   return response.data;
 };
@@ -151,6 +148,21 @@ userService.modifyAppointment = async (token, body, id) => {
     url: `${global.BASE_API_URL}/api/users/update/appointment/${id}`,
     data: body,
     params: { id },
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.request(options);
+  return response.data;
+};
+
+userService.deleteAppointment = async (token, body) => {
+  const options = {
+    method: "DELETE",
+    url: `${global.BASE_API_URL}/api/users/delete/appointment`,
+    data: body,
     headers: {
       accept: "application/json",
       Authorization: `Bearer ${token}`,
