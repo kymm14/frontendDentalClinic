@@ -41,6 +41,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import CreateIcon from "@mui/icons-material/Create";
 
 const defaultTheme = createTheme();
 
@@ -177,9 +178,8 @@ export default function ProfilePage() {
     try {
       const id = { id: search };
       await userService.getAppointmentById(token, id);
-      const response = await userService.getAppointments(token, id);
+      const response = await userService.getAppointments(token);
       setDates(response);
-      setUser(response);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -198,100 +198,114 @@ export default function ProfilePage() {
     return (
       <>
         <Box sx={{ mt: 6 }}>
-          <Typography component='h3' variant='h5' gutterBottom>
+          <Typography
+            component='h2'
+            variant='h4'
+            gutterBottom
+            sx={{ fontSize: 25 }}>
             Appointments
           </Typography>
         </Box>
-        <TableContainer component={Paper}>
-          <TableRow
-            sx={{
-              justifyContent: "center",
-              display: "flex",
-              alignItems: "center",
-              margin: "1em",
-            }}>
-            <Autocomplete
-              id='searchAppointment'
-              options={dates}
-              onClick={handleAppointmentById}
-              getOptionLabel={(option) => option.id}
-              style={{ width: 350 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label='Search appointment'
-                  variant='outlined'
-                />
-              )}
-            />
-          </TableRow>
-          <Table sx={{ minWidth: 350 }} aria-label='simple table'>
-            <TableHead>
-              <TableRow>
-                <TableCell align='center'>ID</TableCell>
-                <TableCell align='center'>Date</TableCell>
-                <TableCell align='center'>Time</TableCell>
-                <TableCell align='center'>Doctor</TableCell>
-                <TableCell align='center'>Options</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {dates.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}>
-                  <TableCell align='center' component='th' scope='row'>
-                    {row.id}
-                  </TableCell>
-                  <TableCell align='center' component='th' scope='row'>
-                    {row.date}
-                  </TableCell>
-                  <TableCell align='center' component='th' scope='row'>
-                    {row.time}
-                  </TableCell>
-                  <TableCell align='center' component='th' scope='row'>
-                    {row.doctorName} {row.doctorLastName}
-                  </TableCell>
-                  <TableCell align='center'>
-                    <IconButton onClick={() => handleUpdateAppointment(row.id)}>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleClickOpen(row.id)}>
-                      <DeleteIcon sx={{ color: "error.main" }} />
-                    </IconButton>
-                  </TableCell>
+        <Box
+          sx={{
+            justifyContent: "center",
+            display: "flex",
+            margin: "1em",
+            textAlign: "center",
+          }}>
+          <TableContainer component={Paper}>
+            <TableRow
+              sx={{
+                justifyContent: "center",
+                display: "flex",
+                alignItems: "center",
+                margin: "1em",
+              }}>
+              <Autocomplete
+                id='searchAppointment'
+                options={dates}
+                onClick={handleAppointmentById}
+                getOptionLabel={(option) => option.id}
+                style={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label='Search appointment'
+                    variant='outlined'
+                  />
+                )}
+              />
+            </TableRow>
+            <Table sx={{ minWidth: 500 }} aria-label='simple table'>
+              <TableHead>
+                <TableRow>
+                  <TableCell align='center'>ID</TableCell>
+                  <TableCell align='center'>Date</TableCell>
+                  <TableCell align='center'>Time</TableCell>
+                  <TableCell align='center'>Doctor</TableCell>
+                  <TableCell align='center'>Options</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <Button
-            onClick={handleCreateAppointment}
-            size='small'
-            variant='contained'
-            endIcon={<AutoFixHighIcon />}>
-            Create Appointment
-          </Button>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {dates.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                    }}>
+                    <TableCell align='center' component='th' scope='row'>
+                      {row.id}
+                    </TableCell>
+                    <TableCell align='center' component='th' scope='row'>
+                      {row.date}
+                    </TableCell>
+                    <TableCell align='center' component='th' scope='row'>
+                      {row.time}
+                    </TableCell>
+                    <TableCell align='center' component='th' scope='row'>
+                      {row.doctorName} {row.doctorLastName}
+                    </TableCell>
+                    <TableCell align='center'>
+                      <IconButton
+                        onClick={() => handleUpdateAppointment(row.id)}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton onClick={() => handleClickOpen(row.id)}>
+                        <DeleteIcon sx={{ color: "error.main" }} />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <Button
+              sx={{ margin: "1em" }}
+              onClick={handleCreateAppointment}
+              size='small'
+              variant='contained'
+              endIcon={<CreateIcon />}>
+              Create New Appointment
+            </Button>
+          </TableContainer>
+        </Box>
         <Dialog
           open={open}
           onClose={handleClose}
           aria-labelledby='alert-dialog-title'
           aria-describedby='alert-dialog-description'>
           <DialogTitle id='alert-dialog-title'>
-            {"Use Google's location service?"}
+            {"Delete Appointment"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id='alert-dialog-description'>
-              Let Google help apps determine location. This means sending
-              anonymous location data to Google, even when no apps are running.
+              Are you sure you want to delete the appointment? This action is
+              irreversible.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Disagree</Button>
+            <Button onClick={handleClose}>No</Button>
             <Button onClick={(handleClose, handleDeleteAppointment)} autoFocus>
-              Agree
+              Yes
             </Button>
           </DialogActions>
         </Dialog>
@@ -309,7 +323,7 @@ export default function ProfilePage() {
 
           <Box
             sx={{
-              marginTop: 8,
+              marginTop: 6,
               marginLeft: 1,
               marginRight: 1,
               alignItems: "flex-start",
@@ -320,15 +334,15 @@ export default function ProfilePage() {
                   <Avatar
                     src={`public/images/avatars/avatar_${user.id}.jpg`}
                     sx={{
-                      width: "80%",
-                      height: "80%",
+                      width: "90%",
+                      height: "90%",
                     }}
                   />
                 </Box>
               </Grid>
               <Grid item sm={9}>
-                <Box>
-                  <Typography component='h2' variant='h4' sx={{ fontSize: 45 }}>
+                <Box sx={{ mt: 1 }}>
+                  <Typography component='h2' variant='h4' sx={{ fontSize: 40 }}>
                     {user.name} {user.last_name}
                   </Typography>
 
@@ -338,7 +352,7 @@ export default function ProfilePage() {
                         <EmailIcon color='primary' />
                       </ListItemIcon>
                       <ListItemText
-                        primaryTypographyProps={{ fontSize: 15 }}
+                        primaryTypographyProps={{ fontSize: 18 }}
                         primary={user?.email}
                       />
                     </ListItem>
@@ -348,7 +362,7 @@ export default function ProfilePage() {
                         <CalendarMonthIcon color='primary' />
                       </ListItemIcon>
                       <ListItemText
-                        primaryTypographyProps={{ fontSize: 15 }}
+                        primaryTypographyProps={{ fontSize: 18 }}
                         primary={user?.birthday}
                       />
                     </ListItem>
@@ -363,7 +377,7 @@ export default function ProfilePage() {
                 </Box>
               </Grid>
             </Grid>
-            <ViewAppointments appointments={dates} />
+            {!isAdmin && <ViewAppointments appointments={dates} />}
           </Box>
         </Container>
       </ThemeProvider>

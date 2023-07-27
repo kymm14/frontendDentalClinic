@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import userService from "../_services/userService";
 
 // @MUI
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -30,6 +30,7 @@ export default function CreateAppointment() {
   const [date, setDate] = React.useState([]);
   const token = useSelector((state) => state.auth.token);
   const { id } = useParams();
+  const [update, setUpdate] = React.useState(false);
 
   useEffect(() => {
     getDoctors();
@@ -43,15 +44,15 @@ export default function CreateAppointment() {
   // DOCTORS
   const names = [
     {
-      id_doctor: 2,
+      id_doctor: 1,
       name: "Fabrizzio Bongiorno",
     },
     {
-      id_doctor: 3,
+      id_doctor: 2,
       name: "Laura García",
     },
     {
-      id_doctor: 4,
+      id_doctor: 3,
       name: "Ernesto Pérez",
     },
   ];
@@ -113,7 +114,10 @@ export default function CreateAppointment() {
     const {
       target: { value },
     } = event;
-    setPersonName(typeof value === "string" ? value.split(",") : value);
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
   };
 
   const handleChangeTime = (event) => {
@@ -138,6 +142,7 @@ export default function CreateAppointment() {
   const updateAppointment = async (body, id) => {
     try {
       const response = await userService.modifyAppointment(token, body, id);
+      setUpdate(true);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -155,87 +160,145 @@ export default function CreateAppointment() {
   };
 
   return (
-    <Box
-      component='form'
-      noValidate
-      onSubmit={handleSubmit}
-      sx={{
-        mt: 2,
-        p: 4,
-        borderRadius: 4,
-        border: "1px solid #e8e8e8",
-        boxShadow:
-          "rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={["DateField", "DateField"]}>
-          <DateField
-            label='Date'
-            id='date'
-            name='date'
-            value={date}
-            onChange={handleChange}
-            format='YYYY-MM-DD'
-          />
-        </DemoContainer>
-      </LocalizationProvider>
+    <>
+      {!update && (
+        <Box
+          component='form'
+          noValidate
+          onSubmit={handleSubmit}
+          sx={{
+            mt: 3,
+            ml: 5,
+            mr: 5,
+            borderRadius: 4,
+            border: "1px solid #e8e8e8",
+            boxShadow:
+              "rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
+          <Typography sx={{ m: 1 }} component='h1' variant='h5'>
+            Update Appointment
+          </Typography>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["DateField", "DateField"]}>
+              <DateField
+                sx={{ width: 250 }}
+                label='Date'
+                id='date'
+                name='date'
+                value={date}
+                onChange={handleChange}
+                format='YYYY-MM-DD'
+              />
+            </DemoContainer>
+          </LocalizationProvider>
 
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id='doctor'>Doctor</InputLabel>
-        <Select
-          labelId='doctor'
-          id='doctor'
-          name='doctor'
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<OutlinedInput label='Name' />}
-          MenuProps={MenuProps}>
-          {names.map((name) => (
-            <MenuItem
-              key={name.id_doctor}
-              value={name.id_doctor}
-              style={getStyles(name, personName, theme)}>
-              {name.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          <FormControl sx={{ m: 1, width: 250 }}>
+            <InputLabel id='doctor'>Doctor</InputLabel>
+            <Select
+              labelId='doctor'
+              id='doctor'
+              name='doctor'
+              multiple
+              value={personName}
+              onChange={handleChange}
+              input={<OutlinedInput label='Name' />}
+              MenuProps={MenuProps}>
+              {names.map((name) => (
+                <MenuItem
+                  key={name.id_doctor}
+                  value={name.id_doctor}
+                  style={getStyles(name, personName, theme)}>
+                  {name.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id='time'>Time</InputLabel>
-        <Select
-          labelId='time'
-          id='time'
-          name='time'
-          multiple
-          value={timeValue}
-          onChange={handleChangeTime}
-          input={<OutlinedInput label='Time' />}
-          MenuProps={MenuProps}>
-          {times.map((time) => (
-            <MenuItem
-              key={time}
-              value={time}
-              style={getStylesTime(time, timeValue, theme)}>
-              {time}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button
-          type='submit'
-          fullWidth
-          variant='contained'
-          sx={{ mt: 3, mb: 2 }}
-          onClick={handleClickSaveAppointment}
-          startIcon={<SaveRoundedIcon />}></Button>
-      </Box>
-    </Box>
+          <FormControl sx={{ m: 1, width: 250 }}>
+            <InputLabel id='time'>Time</InputLabel>
+            <Select
+              labelId='time'
+              id='time'
+              name='time'
+              multiple
+              value={timeValue}
+              onChange={handleChangeTime}
+              input={<OutlinedInput label='Time' />}
+              MenuProps={MenuProps}>
+              {times.map((time) => (
+                <MenuItem
+                  key={time}
+                  value={time}
+                  style={getStylesTime(time, timeValue, theme)}>
+                  {time}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Typography
+            sx={{ mt: 1, fontSize: 15, fontStyle: "italic" }}
+            component='h3'
+            variant='h2'>
+            All fields are required.
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignContent: "center",
+              width: "20%",
+              Button: {
+                xs: { width: "100%" },
+              },
+            }}>
+            <Button
+              type='submit'
+              fullWidth
+              variant='contained'
+              sx={{ mt: 1, mb: 2 }}
+              onClick={handleClickSaveAppointment}
+              startIcon={<SaveRoundedIcon />}>
+              Save
+            </Button>
+          </Box>
+        </Box>
+      )}
+
+      {update && (
+        <Box
+          sx={{
+            mt: 5,
+            justifyContent: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}>
+          <Typography sx={{ fontSize: 30, textAlign: "center" }}>
+            Appointment Updated Successfully!
+          </Typography>
+          <Typography sx={{ fontSize: 15, textAlign: "center" }}>
+            Go back to your profile to see the updates.
+          </Typography>
+
+          <NavLink style={{ textDecoration: "none" }} to='/profile'>
+            <Button
+              variant='contained'
+              size='medium'
+              sx={{
+                mt: 2,
+                color: "white",
+                bgcolor: "primary",
+                alignItems: "center",
+              }}>
+              PROFILE
+            </Button>
+          </NavLink>
+        </Box>
+      )}
+    </>
   );
 }
