@@ -107,6 +107,9 @@ export default function UpdateProfile() {
     <Box
       sx={{
         marginTop: 4,
+        pl: 5,
+        pr: 5,
+
         alignItems: "flex-start",
       }}>
       <Box
@@ -121,8 +124,8 @@ export default function UpdateProfile() {
         <Avatar
           src={`public/images/avatars/avatar_${user.id}.jpg`}
           sx={{
-            width: "20%",
-            height: "20%",
+            width: "15%",
+            height: "15%",
           }}
         />
         <Typography sx={{ mt: 1 }} component='h1' variant='h5'>
@@ -185,6 +188,11 @@ export default function UpdateProfile() {
                   readOnly: !editProfile,
                 }}
               />
+            </Stack>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Stack direction='column' spacing={2}>
               <TextField
                 required
                 fullWidth
@@ -198,11 +206,6 @@ export default function UpdateProfile() {
                   readOnly: !editProfile,
                 }}
               />
-            </Stack>
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <Stack direction='column' spacing={2}>
               <TextField
                 required
                 fullWidth
