@@ -147,6 +147,7 @@ export default function CreateAppointment() {
     try {
       const response = await userService.createAppointment(token, body);
       setAppointments(response);
+      console.log(response);
     } catch (error) {
       console.log(error);
     }

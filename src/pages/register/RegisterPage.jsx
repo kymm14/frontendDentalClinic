@@ -26,7 +26,7 @@ export default function RegisterPage() {
   const [error, setError] = React.useState(null);
   const [register, setRegister] = React.useState(false);
 
-  // HANDLES 
+  // HANDLES
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {

@@ -33,6 +33,15 @@ import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 const defaultTheme = createTheme();
 
 const initialFormValues = {
@@ -57,6 +66,9 @@ export default function ProfilePage() {
   const isDoctor = userRole == "doctor";
   const isAdmin = userRole == "admin";
   const token = useSelector((state) => state.auth.token);
+  const [open, setOpen] = useState(false);
+  const [deleteDate, setDeleteDate] = useState({});
+  const [search, setSearch] = useState({});
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -112,16 +124,25 @@ export default function ProfilePage() {
     }
   };
 
-  const handleDeleteAppointment = async (body) => {
+  const handleDeleteAppointment = async () => {
     try {
-      const id = { id: body };
-      const data = await userService.deleteAppointment(token, id);
+      const id = { id: deleteDate };
+      await userService.deleteAppointment(token, id);
       const response = await userService.getAppointments(token);
       setDates(response);
-      console.log(data);
+      setOpen(false);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleClickOpen = (id) => {
+    setOpen(true);
+    setDeleteDate(id);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const getProfile = async () => {
@@ -152,6 +173,19 @@ export default function ProfilePage() {
     }
   };
 
+  const handleAppointmentById = async () => {
+    try {
+      const id = { id: search };
+      await userService.getAppointmentById(token, id);
+      const response = await userService.getAppointments(token, id);
+      setDates(response);
+      setUser(response);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const ViewAppointments = ({ appointments }) => {
     function createData(id, date, time, doctorName, doctorLastName) {
       return { id, date, time, doctorName, doctorLastName };
@@ -169,9 +203,32 @@ export default function ProfilePage() {
           </Typography>
         </Box>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 300 }} aria-label='simple table'>
+          <TableRow
+            sx={{
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              margin: "1em",
+            }}>
+            <Autocomplete
+              id='searchAppointment'
+              options={dates}
+              onClick={handleAppointmentById}
+              getOptionLabel={(option) => option.id}
+              style={{ width: 350 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label='Search appointment'
+                  variant='outlined'
+                />
+              )}
+            />
+          </TableRow>
+          <Table sx={{ minWidth: 350 }} aria-label='simple table'>
             <TableHead>
               <TableRow>
+                <TableCell align='center'>ID</TableCell>
                 <TableCell align='center'>Date</TableCell>
                 <TableCell align='center'>Time</TableCell>
                 <TableCell align='center'>Doctor</TableCell>
@@ -181,10 +238,13 @@ export default function ProfilePage() {
             <TableBody>
               {dates.map((row) => (
                 <TableRow
-                  key={row.date}
+                  key={row.id}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                   }}>
+                  <TableCell align='center' component='th' scope='row'>
+                    {row.id}
+                  </TableCell>
                   <TableCell align='center' component='th' scope='row'>
                     {row.date}
                   </TableCell>
@@ -198,7 +258,7 @@ export default function ProfilePage() {
                     <IconButton onClick={() => handleUpdateAppointment(row.id)}>
                       <EditIcon />
                     </IconButton>
-                    <IconButton onClick={() => handleDeleteAppointment(row.id)}>
+                    <IconButton onClick={() => handleClickOpen(row.id)}>
                       <DeleteIcon sx={{ color: "error.main" }} />
                     </IconButton>
                   </TableCell>
@@ -214,6 +274,27 @@ export default function ProfilePage() {
             Create Appointment
           </Button>
         </TableContainer>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'>
+          <DialogTitle id='alert-dialog-title'>
+            {"Use Google's location service?"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id='alert-dialog-description'>
+              Let Google help apps determine location. This means sending
+              anonymous location data to Google, even when no apps are running.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Disagree</Button>
+            <Button onClick={(handleClose, handleDeleteAppointment)} autoFocus>
+              Agree
+            </Button>
+          </DialogActions>
+        </Dialog>
       </>
     );
   };

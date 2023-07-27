@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import authService from "../../_services/authService";
 import { updateAuthStateLogin } from "../../features/authentication/updateAuthState";
 import "./LoginPage.scss";
+import PageLoader from "../PageLoader";
 
 const defaultTheme = createTheme();
 
@@ -33,6 +34,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const userRole = useSelector((state) => state.auth.userInfo.role);
   const isAdmin = userRole == "admin";
+  const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -64,6 +66,7 @@ export default function LoginPage() {
   };
 
   const login = async (credentials) => {
+    setisLoading(true);
     try {
       const response = await authService.login(credentials);
       setError(null);
@@ -71,93 +74,97 @@ export default function LoginPage() {
     } catch (error) {
       setError(error.response.data.message);
       console.log(error.response.data.message);
+    } finally {
+      setisLoading(false);
     }
   };
 
   return (
-    <div className='Login'>
-      <div className='backgroundLogin'></div>
-      <ThemeProvider theme={defaultTheme}>
-        {error && (
-          <Alert severity='error'>
-            <AlertTitle>Error</AlertTitle>
-            {error}
-          </Alert>
-        )}
+    <>
+      <div className='Login'>
+        <div className='backgroundLogin'></div>
+        <ThemeProvider theme={defaultTheme}>
+          {error && (
+            <Alert severity='error'>
+              <AlertTitle>Error</AlertTitle>
+              {error}
+            </Alert>
+          )}
 
-        <Container component='main' maxWidth='xs'>
-          <CssBaseline />
+          <Container component='main' maxWidth='xs'>
+            <CssBaseline />
 
-          <Box
-            sx={{
-              paddingTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}>
-            <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component='h1' variant='h5'>
-              Login
-            </Typography>
             <Box
-              component='form'
-              onSubmit={handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}>
-              <TextField
-                margin='normal'
-                required
-                fullWidth
-                id='email'
-                label='Email Address'
-                name='email'
-                autoComplete='email'
-                autoFocus
-              />
-              <TextField
-                margin='normal'
-                required
-                fullWidth
-                name='password'
-                label='Password'
-                type={showPassword ? "text" : "password"}
-                id='password'
-                autoComplete='current-password'
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <IconButton
-                        aria-label='toggle password visibility'
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge='end'>
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-
-              <Button
-                type='submit'
-                fullWidth
-                variant='contained'
-                sx={{ mt: 3, mb: 2 }}>
+              sx={{
+                paddingTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}>
+              <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component='h1' variant='h5'>
                 Login
-              </Button>
-              <Grid container justifyContent='center'>
-                <Grid item>
-                  <Link href='/register' variant='body2' color={"#212121"}>
-                    {"Don't have an account? Register"}
-                  </Link>
+              </Typography>
+              <Box
+                component='form'
+                onSubmit={handleSubmit}
+                noValidate
+                sx={{ mt: 1 }}>
+                <TextField
+                  margin='normal'
+                  required
+                  fullWidth
+                  id='email'
+                  label='Email Address'
+                  name='email'
+                  autoComplete='email'
+                  autoFocus
+                />
+                <TextField
+                  margin='normal'
+                  required
+                  fullWidth
+                  name='password'
+                  label='Password'
+                  type={showPassword ? "text" : "password"}
+                  id='password'
+                  autoComplete='current-password'
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position='end'>
+                        <IconButton
+                          aria-label='toggle password visibility'
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge='end'>
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+
+                <Button
+                  type='submit'
+                  fullWidth
+                  variant='contained'
+                  sx={{ mt: 3, mb: 2 }}>
+                  Login
+                </Button>
+                <Grid container justifyContent='center'>
+                  <Grid item>
+                    <Link href='/register' variant='body2' color={"#212121"}>
+                      {"Don't have an account? Register"}
+                    </Link>
+                  </Grid>
                 </Grid>
-              </Grid>
+              </Box>
             </Box>
-          </Box>
-        </Container>
-      </ThemeProvider>
-    </div>
+          </Container>
+        </ThemeProvider>
+      </div>
+    </>
   );
 }

@@ -112,6 +112,21 @@ userService.getAppointments = async (token, appointment) => {
   return response.data;
 };
 
+userService.getAppointmentById = async (token, body) => {
+  const options = {
+    method: "PUT",
+    url: `${global.BASE_API_URL}/api/users/appointment`,
+    data: body,
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.request(options);
+  return response.data;
+};
+
 userService.getAppointmentsDoctor = async (token, appointment) => {
   const options = {
     method: "GET",
