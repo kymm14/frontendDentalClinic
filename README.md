@@ -66,17 +66,17 @@ Services
 
 Phone
 
-<img src="public\images\screenshots\home-mobile.png">
+<img src="public\images\screenshots\home-mobile.png" width="40%">
 
-<img src="public\images\screenshots\register-mobile.png">
+<img src="public\images\screenshots\register-mobile.png" width="40%">
 
-<img src="public\images\screenshots\login-mobile.png">
+<img src="public\images\screenshots\login-mobile.png" width="40%">
 
-<img src="public\images\screenshots\profile-mobile.png">
+<img src="public\images\screenshots\profile-mobile.png" width="40%">
 
-<img src="public\images\screenshots\edit-profile-mobile.png">
+<img src="public\images\screenshots\edit-profile-mobile.png" width="40%">
 
-<img src="public\images\screenshots\services-mobile.png">
+<img src="public\images\screenshots\services-mobile.png" width="40%">
 
 ## Contacto
 
