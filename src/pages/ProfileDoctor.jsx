@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { format } from "date-fns";
 import userService from "../_services/userService";
 import { useNavigate } from "react-router-dom";
 
@@ -220,7 +219,6 @@ export default function ProfilePage() {
         <ThemeProvider theme={defaultTheme}>
           <Container component='main' maxWidth='md' sx={{ pb: 5 }}>
             <CssBaseline />
-
             <Box
               sx={{
                 marginTop: 8,
@@ -248,7 +246,6 @@ export default function ProfilePage() {
                       sx={{ fontSize: 45 }}>
                       {user.name} {user.last_name}
                     </Typography>
-
                     <List dense={true} sx={{ marginLeft: -2 }}>
                       <ListItem>
                         <ListItemIcon>
@@ -259,7 +256,6 @@ export default function ProfilePage() {
                           primary={user?.email}
                         />
                       </ListItem>
-
                       <ListItem>
                         <ListItemIcon>
                           <CalendarMonthIcon color='primary' />
@@ -316,7 +312,6 @@ export default function ProfilePage() {
               Profile
             </Typography>
           </Box>
-
           <Box
             component='form'
             noValidate
@@ -387,7 +382,6 @@ export default function ProfilePage() {
                   />
                 </Stack>
               </Grid>
-
               <Grid item xs={12} sm={6}>
                 <Stack direction='column' spacing={2}>
                   <TextField

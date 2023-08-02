@@ -32,16 +32,14 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CreateIcon from "@mui/icons-material/Create";
+
+import SearchAppointment from "./SearchAppointment";
 
 const defaultTheme = createTheme();
 
@@ -55,8 +53,6 @@ const initialFormValues = {
 
 export default function ProfilePage() {
   // HOOKS
-  const [showPassword, setShowPassword] = useState(false);
-  const [editProfile, setEditProfile] = useState(false);
   const [user, setUser] = useState({});
   const [dates, setDates] = useState([]);
   const [formValues, setFormValues] = useState(initialFormValues);
@@ -69,7 +65,6 @@ export default function ProfilePage() {
   const token = useSelector((state) => state.auth.token);
   const [open, setOpen] = useState(false);
   const [deleteDate, setDeleteDate] = useState({});
-  const [search, setSearch] = useState({});
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -174,18 +169,6 @@ export default function ProfilePage() {
     }
   };
 
-  const handleAppointmentById = async () => {
-    try {
-      const id = { id: search };
-      await userService.getAppointmentById(token, id);
-      const response = await userService.getAppointments(token);
-      setDates(response);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const ViewAppointments = ({ appointments }) => {
     function createData(id, date, time, doctorName, doctorLastName) {
       return { id, date, time, doctorName, doctorLastName };
@@ -221,20 +204,7 @@ export default function ProfilePage() {
                 alignItems: "center",
                 margin: "1em",
               }}>
-              <Autocomplete
-                id='searchAppointment'
-                options={dates}
-                onClick={handleAppointmentById}
-                getOptionLabel={(option) => option.id}
-                style={{ width: 300 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label='Search appointment'
-                    variant='outlined'
-                  />
-                )}
-              />
+              <SearchAppointment />
             </TableRow>
             <Table sx={{ minWidth: 500 }} aria-label='simple table'>
               <TableHead>

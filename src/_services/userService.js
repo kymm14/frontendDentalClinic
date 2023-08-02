@@ -112,11 +112,11 @@ userService.getAppointments = async (token, appointment) => {
   return response.data;
 };
 
-userService.getAppointmentById = async (token, body) => {
+userService.getAppointmentById = async (token, id) => {
   const options = {
-    method: "PUT",
+    method: "POST",
     url: `${global.BASE_API_URL}/api/users/appointment`,
-    data: body,
+    data: id,
     headers: {
       accept: "application/json",
       Authorization: `Bearer ${token}`,

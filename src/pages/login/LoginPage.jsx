@@ -22,7 +22,6 @@ import { useNavigate } from "react-router-dom";
 import authService from "../../_services/authService";
 import { updateAuthStateLogin } from "../../features/authentication/updateAuthState";
 import "./LoginPage.scss";
-import PageLoader from "../PageLoader";
 
 const defaultTheme = createTheme();
 
