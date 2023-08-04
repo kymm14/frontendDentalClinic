@@ -18,11 +18,12 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateField } from "@mui/x-date-pickers/DateField";
+import dayjs from "dayjs";
 
 export default function CreateAppointment() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const [doctors, setDoctors] = useState({});
+  const [doctors, setDoctor] = useState([]);
   const [appointments, setAppointments] = useState(false);
   const [personName, setPersonName] = React.useState([]);
   const [timeValue, setTime] = React.useState([]);
@@ -31,29 +32,9 @@ export default function CreateAppointment() {
   const token = useSelector((state) => state.auth.token);
   const [created, setCreated] = useState(false);
 
-  useEffect(() => {
-    getDoctors();
-  }, []);
-
   const handleClickSaveAppointment = () => {
     setAppointments(true);
   };
-
-  // DOCTORS
-  const names = [
-    {
-      id_doctor: 1,
-      name: "Fabrizzio Bongiorno",
-    },
-    {
-      id_doctor: 2,
-      name: "Laura García",
-    },
-    {
-      id_doctor: 3,
-      name: "Ernesto Pérez",
-    },
-  ];
 
   // TIME APPOINTMENTS
   const times = [
@@ -122,6 +103,20 @@ export default function CreateAppointment() {
     setTime(typeof value === "string" ? value.split(",") : value);
   };
 
+  useEffect(() => {
+    getDoctors();
+  }, []);
+
+  const getDoctors = async () => {
+    try {
+      const data = await userService.getDoctors(token);
+      setDoctor(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -132,16 +127,6 @@ export default function CreateAppointment() {
     };
 
     createAppointment(body);
-  };
-
-  const getDoctors = async () => {
-    try {
-      const data = await userService.getDoctors(token);
-      setDoctors(data);
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const createAppointment = async (body) => {
@@ -204,12 +189,12 @@ export default function CreateAppointment() {
               onChange={handleChange}
               input={<OutlinedInput label='Name' />}
               MenuProps={MenuProps}>
-              {names.map((name) => (
+              {doctors.map((doc) => (
                 <MenuItem
-                  key={name.id_doctor}
-                  value={name.id_doctor}
-                  style={getStyles(name, personName, theme)}>
-                  {name.name}
+                  key={doc.id}
+                  value={doc.id}
+                  style={getStyles(doctors, personName, theme)}>
+                  {doc.user.name} {doc.user.last_name}
                 </MenuItem>
               ))}
             </Select>

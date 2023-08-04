@@ -22,7 +22,7 @@ import { DateField } from "@mui/x-date-pickers/DateField";
 export default function CreateAppointment() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const [doctors, setDoctors] = useState({});
+  const [doctors, setDoctor] = useState([]);
   const [appointments, editAppointments] = useState(false);
   const theme = useTheme();
   const [personName, setPersonName] = React.useState([]);
@@ -40,22 +40,6 @@ export default function CreateAppointment() {
   const handleClickSaveAppointment = () => {
     editAppointments(true);
   };
-
-  // DOCTORS
-  const names = [
-    {
-      id_doctor: 1,
-      name: "Fabrizzio Bongiorno",
-    },
-    {
-      id_doctor: 2,
-      name: "Laura García",
-    },
-    {
-      id_doctor: 3,
-      name: "Ernesto Pérez",
-    },
-  ];
 
   // TIME APPOINTMENTS
   const times = [
@@ -152,7 +136,7 @@ export default function CreateAppointment() {
   const getDoctors = async () => {
     try {
       const data = await userService.getDoctors(token);
-      setDoctors(data);
+      setDoctor(data);
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -207,12 +191,12 @@ export default function CreateAppointment() {
               onChange={handleChange}
               input={<OutlinedInput label='Name' />}
               MenuProps={MenuProps}>
-              {names.map((name) => (
+              {doctors.map((doc) => (
                 <MenuItem
-                  key={name.id_doctor}
-                  value={name.id_doctor}
-                  style={getStyles(name, personName, theme)}>
-                  {name.name}
+                  key={doc.id}
+                  value={doc.id}
+                  style={getStyles(doctors, personName, theme)}>
+                  {doc.user.name} {doc.user.last_name}
                 </MenuItem>
               ))}
             </Select>
