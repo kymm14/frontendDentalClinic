@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import authService from "../../_services/authService";
+import { updateAuthStateLogin } from "../../features/authentication/updateAuthState";
+import "./LoginPage.scss";
 
 // @MUI
 import Avatar from "@mui/material/Avatar";
@@ -15,13 +20,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AlertTitle, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Alert from "@mui/material/Alert";
-
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
-import authService from "../../_services/authService";
-import { updateAuthStateLogin } from "../../features/authentication/updateAuthState";
-import "./LoginPage.scss";
 
 const defaultTheme = createTheme();
 
@@ -45,6 +43,7 @@ export default function LoginPage() {
     }
   }, [isLoggedIn]);
 
+  // HANDLERS
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
@@ -89,10 +88,8 @@ export default function LoginPage() {
               {error}
             </Alert>
           )}
-
           <Container component='main' maxWidth='xs'>
             <CssBaseline />
-
             <Box
               sx={{
                 paddingTop: 8,
@@ -144,7 +141,6 @@ export default function LoginPage() {
                     ),
                   }}
                 />
-
                 <Button
                   type='submit'
                   fullWidth

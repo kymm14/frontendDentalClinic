@@ -134,21 +134,27 @@ export default function ProfilePage() {
   };
 
   const modifyProfile = async (token) => {
+    setIsLoading(true);
     try {
       const response = await userService.modifyProfile(token);
       setEditProfile(false);
       getProfile(token);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const getAppointments = async () => {
+    setIsLoading(true);
     try {
       const response = await userService.getAppointmentsDoctor(token);
       setDates(response);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -161,6 +167,7 @@ export default function ProfilePage() {
       createData(a.date, a.time, a.patient.name, a.patient.lastName)
     );
 
+    // ----------------------------------------------------------------
     return (
       <>
         <Box sx={{ mt: 6 }}>
@@ -211,7 +218,7 @@ export default function ProfilePage() {
     );
   };
 
-  // ----------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------
 
   return (
     <>

@@ -19,18 +19,71 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateField } from "@mui/x-date-pickers/DateField";
 
+// TIME APPOINTMENTS
+const times = [
+  "08:00",
+  "08:30",
+  "09:00",
+  "09:30",
+  "10:00",
+  "10:30",
+  "11:00",
+  "11:30",
+  "12:00",
+  "12:30",
+  "13:00",
+  "13:30",
+  "14:00",
+  "14:30",
+  "15:00",
+  "15:30",
+  "16:00",
+  "16:30",
+  "17:00",
+];
+
+// TABLE SELECTION
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
+function getStylesTime(time, timeValue, theme) {
+  return {
+    fontWeight:
+      timeValue.indexOf(time) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
+// ----------------------------------------------------------------
 export default function CreateAppointment() {
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
-  const [doctors, setDoctor] = useState([]);
   const [appointments, editAppointments] = useState(false);
-  const theme = useTheme();
+  const [update, setUpdate] = React.useState(false);
   const [personName, setPersonName] = React.useState([]);
   const [timeValue, setTime] = React.useState([]);
   const [date, setDate] = React.useState([]);
+  const [doctors, setDoctor] = useState([]);
   const token = useSelector((state) => state.auth.token);
+  const theme = useTheme();
   const { id } = useParams();
-  const [update, setUpdate] = React.useState(false);
 
   useEffect(() => {
     getDoctors();
@@ -40,59 +93,6 @@ export default function CreateAppointment() {
   const handleClickSaveAppointment = () => {
     editAppointments(true);
   };
-
-  // TIME APPOINTMENTS
-  const times = [
-    "08:00",
-    "08:30",
-    "09:00",
-    "09:30",
-    "10:00",
-    "10:30",
-    "11:00",
-    "11:30",
-    "12:00",
-    "12:30",
-    "13:00",
-    "13:30",
-    "14:00",
-    "14:30",
-    "15:00",
-    "15:30",
-    "16:00",
-    "16:30",
-    "17:00",
-  ];
-
-  // TABLE SELECTION
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
-
-  function getStyles(name, personName, theme) {
-    return {
-      fontWeight:
-        personName.indexOf(name) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium,
-    };
-  }
-
-  function getStylesTime(time, timeValue, theme) {
-    return {
-      fontWeight:
-        timeValue.indexOf(time) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium,
-    };
-  }
 
   const handleChange = (event) => {
     const {
@@ -124,22 +124,28 @@ export default function CreateAppointment() {
   };
 
   const updateAppointment = async (body, id) => {
+    setIsLoading(true);
     try {
       const response = await userService.modifyAppointment(token, body, id);
       setUpdate(true);
       console.log(response);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const getDoctors = async () => {
+    setIsLoading(true);
     try {
       const data = await userService.getDoctors(token);
       setDoctor(data);
       console.log(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -179,7 +185,6 @@ export default function CreateAppointment() {
               />
             </DemoContainer>
           </LocalizationProvider>
-
           <FormControl sx={{ m: 1, width: 250 }}>
             <InputLabel id='doctor'>Doctor</InputLabel>
             <Select
@@ -201,7 +206,6 @@ export default function CreateAppointment() {
               ))}
             </Select>
           </FormControl>
-
           <FormControl sx={{ m: 1, width: 250 }}>
             <InputLabel id='time'>Time</InputLabel>
             <Select
@@ -267,7 +271,6 @@ export default function CreateAppointment() {
           <Typography sx={{ fontSize: 15, textAlign: "center" }}>
             Go back to your profile to see the updates.
           </Typography>
-
           <NavLink style={{ textDecoration: "none" }} to='/profile'>
             <Button
               variant='contained'

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import userService from "../_services/userService";
 import { useNavigate } from "react-router-dom";
+import SearchAppointment from "./SearchAppointment";
 
 // @MUI
 import {
@@ -39,8 +40,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CreateIcon from "@mui/icons-material/Create";
 
-import SearchAppointment from "./SearchAppointment";
-
 const defaultTheme = createTheme();
 
 const initialFormValues = {
@@ -57,14 +56,14 @@ export default function ProfilePage() {
   const [dates, setDates] = useState([]);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [isLoading, setIsLoading] = useState(true);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const navigate = useNavigate();
-  const userRole = useSelector((state) => state.auth.userInfo.role);
-  const isDoctor = userRole == "doctor";
-  const isAdmin = userRole == "admin";
-  const token = useSelector((state) => state.auth.token);
   const [open, setOpen] = useState(false);
   const [deleteDate, setDeleteDate] = useState({});
+  const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const userRole = useSelector((state) => state.auth.userInfo.role);
+  const token = useSelector((state) => state.auth.token);
+  const isDoctor = userRole == "doctor";
+  const isAdmin = userRole == "admin";
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -97,29 +96,6 @@ export default function ProfilePage() {
     navigate(`/appointment/${id}`);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const body = {
-      name: data.get("firstName"),
-      last_name: data.get("lastName"),
-      email: data.get("email"),
-      birthday: data.get("birthday"),
-      password: data.get("password"),
-    };
-    modifyProfile(body);
-  };
-
-  const modifyProfile = async (body) => {
-    try {
-      const response = await userService.modifyProfile(token, body);
-      setUser(response);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleDeleteAppointment = async () => {
     try {
       const id = { id: deleteDate };
@@ -141,6 +117,32 @@ export default function ProfilePage() {
     setOpen(false);
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const body = {
+      name: data.get("firstName"),
+      last_name: data.get("lastName"),
+      email: data.get("email"),
+      birthday: data.get("birthday"),
+      password: data.get("password"),
+    };
+    modifyProfile(body);
+  };
+
+  const modifyProfile = async (body) => {
+    setIsLoading(true);
+    try {
+      const response = await userService.modifyProfile(token, body);
+      setUser(response);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const getProfile = async () => {
     setIsLoading(true);
     try {
@@ -160,12 +162,15 @@ export default function ProfilePage() {
   };
 
   const getAppointments = async () => {
+    setIsLoading(true);
     try {
       const response = await userService.getAppointments(token);
       setDates(response);
       console.log(response);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -283,14 +288,12 @@ export default function ProfilePage() {
     );
   };
 
-  // ----------------------------------------------------------------------------------------
-
+  // ----------------------------------------------------------------
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
         <Container component='main' maxWidth='md' sx={{ pb: 5 }}>
           <CssBaseline />
-
           <Box
             sx={{
               marginTop: 6,
@@ -315,7 +318,6 @@ export default function ProfilePage() {
                   <Typography component='h2' variant='h4' sx={{ fontSize: 40 }}>
                     {user.name} {user.last_name}
                   </Typography>
-
                   <List dense={true} sx={{ marginLeft: -2 }}>
                     <ListItem>
                       <ListItemIcon>
@@ -326,7 +328,6 @@ export default function ProfilePage() {
                         primary={user?.email}
                       />
                     </ListItem>
-
                     <ListItem>
                       <ListItemIcon>
                         <CalendarMonthIcon color='primary' />

@@ -1,6 +1,8 @@
 import * as React from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
+import "./ResponsiveAppBar.scss";
+import { updateAuthStateLogout } from "../../../features/authentication/updateAuthState";
 
 // @MUI
 import AppBar from "@mui/material/AppBar";
@@ -18,10 +20,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Divider } from "@mui/material";
 import BuildTwoToneIcon from "@mui/icons-material/BuildTwoTone";
 import LoginTwoToneIcon from "@mui/icons-material/LoginTwoTone";
-
-//
-import "./ResponsiveAppBar.scss";
-import { updateAuthStateLogout } from "../../../features/authentication/updateAuthState";
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +42,7 @@ const settings = [
 // ----------------------------------------------------------------------
 
 function ResponsiveAppBar() {
+  // HOOKS
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -51,6 +50,7 @@ function ResponsiveAppBar() {
   const userRole = useSelector((state) => state.auth.userInfo.role);
   const isAdmin = userRole == "admin";
 
+  // HANDLERS
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };

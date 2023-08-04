@@ -18,11 +18,64 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateField } from "@mui/x-date-pickers/DateField";
-import dayjs from "dayjs";
 
+// TIME APPOINTMENTS
+const times = [
+  "08:00",
+  "08:30",
+  "09:00",
+  "09:30",
+  "10:00",
+  "10:30",
+  "11:00",
+  "11:30",
+  "12:00",
+  "12:30",
+  "13:00",
+  "13:30",
+  "14:00",
+  "14:30",
+  "15:00",
+  "15:30",
+  "16:00",
+  "16:30",
+  "17:00",
+];
+
+// TABLE SELECTION
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
+function getStylesTime(time, timeValue, theme) {
+  return {
+    fontWeight:
+      timeValue.indexOf(time) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
+//----------------------------------------------------------------
 export default function CreateAppointment() {
+  // HOOKS
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
   const [doctors, setDoctor] = useState([]);
   const [appointments, setAppointments] = useState(false);
   const [personName, setPersonName] = React.useState([]);
@@ -32,62 +85,10 @@ export default function CreateAppointment() {
   const token = useSelector((state) => state.auth.token);
   const [created, setCreated] = useState(false);
 
+  // HANDLERS
   const handleClickSaveAppointment = () => {
     setAppointments(true);
   };
-
-  // TIME APPOINTMENTS
-  const times = [
-    "08:00",
-    "08:30",
-    "09:00",
-    "09:30",
-    "10:00",
-    "10:30",
-    "11:00",
-    "11:30",
-    "12:00",
-    "12:30",
-    "13:00",
-    "13:30",
-    "14:00",
-    "14:30",
-    "15:00",
-    "15:30",
-    "16:00",
-    "16:30",
-    "17:00",
-  ];
-
-  // TABLE SELECTION
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
-
-  function getStyles(name, personName, theme) {
-    return {
-      fontWeight:
-        personName.indexOf(name) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium,
-    };
-  }
-
-  function getStylesTime(time, timeValue, theme) {
-    return {
-      fontWeight:
-        timeValue.indexOf(time) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium,
-    };
-  }
 
   const handleChange = (event) => {
     const {
@@ -103,20 +104,6 @@ export default function CreateAppointment() {
     setTime(typeof value === "string" ? value.split(",") : value);
   };
 
-  useEffect(() => {
-    getDoctors();
-  }, []);
-
-  const getDoctors = async () => {
-    try {
-      const data = await userService.getDoctors(token);
-      setDoctor(data);
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -129,7 +116,25 @@ export default function CreateAppointment() {
     createAppointment(body);
   };
 
+  useEffect(() => {
+    getDoctors();
+  }, []);
+
+  const getDoctors = async () => {
+    setIsLoading(true);
+    try {
+      const data = await userService.getDoctors(token);
+      setDoctor(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const createAppointment = async (body) => {
+    setIsLoading(true);
     try {
       const response = await userService.createAppointment(token, body);
       setAppointments(response);
@@ -137,6 +142,8 @@ export default function CreateAppointment() {
       console.log(response);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 

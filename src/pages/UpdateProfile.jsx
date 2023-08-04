@@ -14,7 +14,6 @@ import {
   Stack,
   TextField,
   Typography,
-  createTheme,
 } from "@mui/material";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
@@ -29,6 +28,7 @@ const initialFormValues = {
 };
 
 export default function UpdateProfile() {
+  // HOOKS
   const [showPassword, setShowPassword] = useState(false);
   const [editProfile, setEditProfile] = useState(true);
   const [user, setUser] = useState({});
@@ -60,6 +60,19 @@ export default function UpdateProfile() {
     });
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const body = {
+      name: data.get("firstName"),
+      last_name: data.get("lastName"),
+      email: data.get("email"),
+      birthday: data.get("birthday"),
+      password: data.get("password"),
+    };
+    modifyProfile(body);
+  };
+
   const getProfile = async () => {
     setIsLoading(true);
     try {
@@ -79,20 +92,8 @@ export default function UpdateProfile() {
     }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const body = {
-      name: data.get("firstName"),
-      last_name: data.get("lastName"),
-      email: data.get("email"),
-      birthday: data.get("birthday"),
-      password: data.get("password"),
-    };
-    modifyProfile(body);
-  };
-
   const modifyProfile = async (body) => {
+    setIsLoading(true);
     try {
       const response = await userService.modifyProfile(token, body);
       setUser(response);
@@ -100,6 +101,8 @@ export default function UpdateProfile() {
       console.log(response);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,7 +112,6 @@ export default function UpdateProfile() {
         marginTop: 4,
         pl: 5,
         pr: 5,
-
         alignItems: "flex-start",
       }}>
       <Box
@@ -132,7 +134,6 @@ export default function UpdateProfile() {
           Profile
         </Typography>
       </Box>
-
       <Box
         component='form'
         noValidate
@@ -190,7 +191,6 @@ export default function UpdateProfile() {
               />
             </Stack>
           </Grid>
-
           <Grid item xs={12} sm={6}>
             <Stack direction='column' spacing={2}>
               <TextField

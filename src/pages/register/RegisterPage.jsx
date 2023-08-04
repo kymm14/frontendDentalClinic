@@ -1,4 +1,7 @@
 import * as React from "react";
+import "./RegisterPage.scss";
+import authService from "../../_services/authService";
+import { NavLink } from "react-router-dom";
 
 // @MUI
 import Avatar from "@mui/material/Avatar";
@@ -15,18 +18,15 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-import "./RegisterPage.scss";
-import authService from "../../_services/authService";
-import { NavLink } from "react-router-dom";
-
 const defaultTheme = createTheme();
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [register, setRegister] = React.useState(false);
+  const [isLoading, setisLoading] = useState(true);
 
-  // HANDLES
+  // HANDLERS
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
@@ -48,6 +48,7 @@ export default function RegisterPage() {
   };
 
   const newRegister = async (credentialsRegister) => {
+    setisLoading(true);
     try {
       const response = await authService.register(credentialsRegister);
       setError(null);
@@ -56,6 +57,8 @@ export default function RegisterPage() {
     } catch (error) {
       setError(error.response.data);
       console.log(error.response.data);
+    } finally {
+      setisLoading(false);
     }
   };
 

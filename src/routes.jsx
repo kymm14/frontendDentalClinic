@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router";
 import { Navigate } from "react-router-dom";
 
-// pages
+// PAGES
 import AdminPage from "./pages/AdminPage";
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/login/LoginPage";
@@ -30,9 +30,9 @@ export default function Router() {
         <Route path='/admin' element={<AdminPage />} />
         <Route path='/about' element={<AboutPage />} />
         <Route path='/create' element={<CreateAppointment />} />
-        <Route path='/appointment/:id' element={<UpdateAppointment />} />
         <Route path='/appointment' element={<SearchAppointment />} />
         <Route path='/update' element={<UpdateProfile />} />
+        <Route path='/appointment/:id' element={<UpdateAppointment />} />
         <Route path='/404' element={<Page404 />} />
         <Route path='*' element={<Navigate to='/404' />} />
       </Routes>

@@ -21,8 +21,6 @@ import Paper from "@mui/material/Paper";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-// ----------------------------------------------------------------------
-
 export default function AdminPage() {
   // HOOKS
   const [users, setUsers] = useState([]);
@@ -35,8 +33,7 @@ export default function AdminPage() {
     getUsers();
   }, [usersPage]);
 
-  // HANDLE
-
+  // HANDLERS
   const handleChange = (event, value) => {
     setUsersPage(value);
   };

@@ -1,3 +1,8 @@
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import userService from "../_services/userService";
+
+// @MUI
 import {
   Box,
   Stack,
@@ -10,17 +15,16 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import userService from "../_services/userService";
 
 export default function SearchAppointment() {
+  // HOOKS
   const token = useSelector((state) => state.auth.token);
   const [appointment, setAppointment] = useState({});
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // HANDLERS
   const handleSubmit = async (event) => {
+    setIsLoading(true);
     try {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
@@ -28,10 +32,13 @@ export default function SearchAppointment() {
       getOneAppointment(idAppointment);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const getOneAppointment = async (idAppointment) => {
+    setIsLoading(true);
     try {
       const id = { id: idAppointment };
       const data = await userService.getAppointmentById(token, id);
@@ -39,7 +46,7 @@ export default function SearchAppointment() {
     } catch (error) {
       console.log(error);
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 

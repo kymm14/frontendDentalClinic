@@ -4,7 +4,7 @@ import { global } from "../_config/global";
 
 const userService = {};
 
-// USERS SERVICES
+// USER SERVICES
 
 userService.getAll = async (token, page = 1) => {
   const options = {

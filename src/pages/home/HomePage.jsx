@@ -4,6 +4,7 @@ import "./HomePage.scss";
 import { useSelector } from "react-redux";
 
 export default function HomePage() {
+  // HOOKS
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userName = useSelector((state) => state.auth.userInfo.name);
 
